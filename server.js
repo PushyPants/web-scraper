@@ -21,18 +21,8 @@ db.on('error', function(error) {
     console.log('Database error:', error);
 });
 
-//Set route to retrieve data from the db
-app.get('/all', function(req, res) {
-    db.articles.find({}, function(error, response) {
-        if (error) {
-            console.log(error);
-        } else {
-            res.json(response);
-        };
-    });
-});
-
-// app.get('/scrape', function(req, res) {
+//Set the root to scrape/rescrape articles
+app.get('/', function(req, res) {
     
     //We'll use Request to pull all the HTML from the page
     request('https://engadget.com/all/', function(err, res, html) {
@@ -51,6 +41,8 @@ app.get('/all', function(req, res) {
             //make sure that none of the db fields are blank/null/undefined
             if(aTitle != '' && aSummary != '' && aLink != undefined && imgLink != undefined) {
 
+                //check for existing articles
+
                 //insert data in db
                 db.articles.insert({
                     title: aTitle,
@@ -68,9 +60,20 @@ app.get('/all', function(req, res) {
             };
         });    
     });
-//     //Send confirmation to browser
-//     res.send("scrape complete");
-// });
+    //Send confirmation to browser
+    res.send("scrape complete");
+});
+
+//Set route to retrieve data from the db
+app.get('/all', function(req, res) {
+    db.articles.find({}, function(error, response) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.json(response);
+        };
+    });
+});
 
 app.listen(3000, function() {
     console.log('app litening on port 3000.')
