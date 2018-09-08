@@ -1,11 +1,11 @@
 //dependencies
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 //Create a reference to the Schema constructor
-const Schema = mongoose.Schema;
+var Schema = mongoose.Schema;
 
 //Create a new UserSchema object
-let ArticleSchema = new Schema({
+var ArticleSchema = new Schema({
     title: {
         type: String,
         required: true
@@ -28,7 +28,7 @@ let ArticleSchema = new Schema({
 });
 
 //Create the model using mongoos's model method
-const Article = mongoose.model('Article', ArticleSchema);
+var Articles = mongoose.model('Articles', ArticleSchema);
 
 //Export the model
-module.exports = Article;
+module.exports = Articles;

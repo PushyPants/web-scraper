@@ -1,6 +1,6 @@
 //Dependencies
 const express = require('express');
-const mongojs = require('mongojs');
+const mongoose = require('mongoose');
 
 //Cheerio parses the HTML to allow us to find elements
 const cheerio = require('cheerio');
@@ -8,18 +8,18 @@ const cheerio = require('cheerio');
 //Request makes the HTTP request for the HTML page
 const request = require('request');
 
+//Require all models
+const db = require('./models');
+
+const PORT = 3000;
+
 //Initialize Express
 const app = express();
 
 //Database configuration
-const databaseUrl = 'news_scraper_db';
-const collections = ['articles', 'comments'];
+mongoose.connect('mongodb://localhost/news_scraper_db');
 
-//Tie mongojs config to the db variable
-const db = mongojs(databaseUrl, collections);
-db.on('error', function(error) {
-    console.log('Database error:', error);
-});
+console.log(db.articles)
 
 //Set the root to scrape/rescrape articles
 app.get('/', function(req, res) {
@@ -44,7 +44,7 @@ app.get('/', function(req, res) {
                 //check for existing articles
 
                 //insert data in db
-                db.articles.insert({
+                db.Articles.create({
                     title: aTitle,
                     summary: aSummary,
                     link:  aLink,
@@ -75,6 +75,6 @@ app.get('/all', function(req, res) {
     });
 });
 
-app.listen(3000, function() {
-    console.log('app litening on port 3000.')
+app.listen(PORT, function() {
+    console.log(`App listening on port: ${PORT}!`);
 });
