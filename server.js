@@ -41,8 +41,6 @@ app.get('/', function(req, res) {
             //make sure that none of the db fields are blank/null/undefined
             if(aTitle != '' && aSummary != '' && aLink != undefined && imgLink != undefined) {
 
-                //check for existing articles
-
                 //insert data in db
                 db.Articles.create({
                     title: aTitle,
@@ -58,7 +56,8 @@ app.get('/', function(req, res) {
                     };
                 });
             };
-        });    
+        });
+            
     });
     //Send confirmation to browser
     res.send("scrape complete");
