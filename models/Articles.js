@@ -25,6 +25,11 @@ var ArticleSchema = new Schema({
     img: {
         type: String,
         required: true
+    },
+
+    saved: {
+        type: Boolean,
+        default: false
     }
 });
 
