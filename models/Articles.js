@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 //Create a reference to the Schema constructor
 var Schema = mongoose.Schema;
-
+let timeStamp = Math.round((new Date()).getTime() / 1000);
 //Create a new UserSchema object
 var ArticleSchema = new Schema({
     title: {

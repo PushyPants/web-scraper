@@ -2,6 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const exphbs = require('express-handlebars');
 
 //Cheerio parses the HTML to allow us to find elements
 const cheerio = require('cheerio');
@@ -24,13 +25,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static('public'));
 
+// Set Handlebars as the default templating engine.
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
+
 //Database configuration for dev & deployment
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/news_scraper_db';
 mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 //Set the root to scrape/rescrape articles
-app.get('/scrape', function(req, res) {
+app.get('/', function(req, res) {
     console.log('trying to run route: 1')
     //We'll use Request to pull all the HTML from the page
     request('https://engadget.com/all/', function(err, res, html) {
@@ -51,14 +56,14 @@ app.get('/scrape', function(req, res) {
                 db.Articles.create({
                     title: aTitle,
                     summary: aSummary,
-                    link:  aLink,
+                    link:  'https://engadget.com'+aLink,
                     img: imgLink
                 },
                 function(err, data) {
                     if (err) {
-                        console.log(err);
+                       // console.log(err);
                     } else {
-                        console.log(data);
+                       // console.log(data);
                     };
                 });
             };
@@ -67,18 +72,33 @@ app.get('/scrape', function(req, res) {
     });
     //Send confirmation to browser
     console.log('trying to run route: 3')
-    res.redirect('/');
+    res.render('index');
 });
 
 //Set route to retrieve data from the db
 app.get('/all', function(req, res) {
-    db.articles.find({}, function(error, response) {
+    db.Articles.find({}, null, {sort: {"_id":1}}, function(error, response) {
         if (error) {
             console.log(error);
         } else {
             res.json(response);
         };
     });
+});
+
+//Set route to retrieve saved articles from the db
+app.get('/getSaved', function(req, res) {
+    db.Articles.find({saved: true}, null, {sort: {"_id":1}}, function(error, response) {
+        if (error) {
+            console.log(error);
+        } else {
+            res.json(response);
+        };
+    });
+});
+
+app.get('/saved', function(req, res) {
+    res.render('index');
 });
 
 app.listen(PORT, function() {
