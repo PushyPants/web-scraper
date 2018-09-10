@@ -77,7 +77,7 @@ app.get('/', function(req, res) {
 
 //Set route to retrieve data from the db
 app.get('/all', function(req, res) {
-    db.Articles.find({}, null, {sort: {"_id":1}}, function(error, response) {
+    db.Articles.find({}, null, {sort: {"_id":-1}}, function(error, response) {
         if (error) {
             console.log(error);
         } else {
