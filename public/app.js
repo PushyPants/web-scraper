@@ -11,7 +11,7 @@ $(window).on('load', function(){
             data.forEach(e => {
                 $('.main-bod').append(`
                     <div class="row article-row" data-id="${e._id}">
-                        <div class="col s12 m6">
+                        <div class="col s12 m8 offset-m2 l6 offset-l3">
                             <div class="card hoverable">
                                 <div class="card-image">
                                     <a href="${e.link}">
@@ -40,7 +40,7 @@ $(window).on('load', function(){
             data.forEach(e => {
                 $('.main-bod').append(`
                     <div class="row article-row" data-id="${e._id}">
-                        <div class="col s12 m6">
+                        <div class="col s12 m6 offset-m3 l4 offset-l4 ">
                             <div class="card hoverable">
                                 <div class="card-image">
                                     <a href="${e.link}">
